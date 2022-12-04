@@ -1,17 +1,28 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="title_header">
+      <h1>ピンポンダッシュ</h1>
+    </div>
+    <component @start-game="mode='gameVue'" :is="mode"></component>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import titleVue from './components/title.vue';
+import gameVue from './components/game.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HelloWorld,
+    titleVue,
+    gameVue
+  },
+  data() {
+    return {
+      mode: 'titleVue'
+    }
   }
 }
 </script>
