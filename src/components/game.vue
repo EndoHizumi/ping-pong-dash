@@ -5,6 +5,7 @@
     </div>
 </template>
 <script>
+let audioBuffer = null
 export default {
     name: "gameVue",
     data() {
@@ -17,10 +18,7 @@ export default {
     async mounted() {
         const res = await fetch("nc250918.mp3")
         const arrBuffer = await res.arrayBuffer()
-        const audioBuffer = await this.context.decodeAudioData(arrBuffer)
-        this.source = this.context.createBufferSource()
-        this.source.buffer = audioBuffer
-        this.source.connect(this.context.destination)
+        audioBuffer = await this.context.decodeAudioData(arrBuffer)
     },
     methods: {
         play() {
@@ -28,6 +26,9 @@ export default {
                 this.context.resume();
                 this.source.pause();
             }
+            this.source = this.context.createBufferSource()
+            this.source.buffer = audioBuffer
+            this.source.connect(this.context.destination)
             this.source.start()
             this.count++
         }
