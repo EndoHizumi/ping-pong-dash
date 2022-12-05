@@ -1,9 +1,7 @@
 <template>
     <div class="title">
-
         <div class="startBtn">
-            <img @click="onclick" class="startBtn_image" src="@/assets/itazura_pinpon_dash.png">
-            <span class="startBtn_caption">始める</span>
+            <div class="startBtn_image"><img @click="onclick" src="@/assets/itazura_pinpon_dash.png"></div>
         </div>
     </div>
 </template>
@@ -27,30 +25,26 @@ export default {
 }
 </script>
 <style>
-
 .startBtn {
-    position: relative;
+    display: flex;
+    justify-content: center;
 }
 
-.startBtn_caption {
-    font-size: 30px;
-    font-weight: bold;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    opacity: 0;
-    transform: translate(-50%,-50%);
+.startBtn_image {
+    width: 30%;
 }
 
-.startBtn:hover .startBtn_caption {
-    opacity: 1;
-}
-
-.startBtn:hover .startBtn_image {
+.startBtn_image:hover {
     opacity: 0.6;
 }
 
-.startBtn_image:active {
-    transform: translateY(5px);
+.startBtn_image:hover::after {
+    position: absolute;
+    bottom: 40%;
+    right: 40%;
+    font-size: 100px;
+    font-weight: bold;
+    content: '始める';
+    text-align: center;
 }
 </style>

@@ -1,7 +1,9 @@
 <template>
     <div id="game">
         <div>ピンポンした数：{{ count }}</div>
-        <div><img @click="play" src="@/assets/door_bell.png" /></div>
+        <div>
+            <img @click="play" class="doorBell" src="@/assets/door_bell.png" />
+        </div>
     </div>
 </template>
 <script>
@@ -22,10 +24,6 @@ export default {
     },
     methods: {
         play() {
-            if (this.context.state === 'suspended') {
-                this.context.resume();
-                this.source.pause();
-            }
             this.source = this.context.createBufferSource()
             this.source.buffer = audioBuffer
             this.source.connect(this.context.destination)
@@ -36,5 +34,12 @@ export default {
 }
 </script>
 <style>
+.doorBell {
+    max-width: 30%;
+}
+
+.doorBell:active {
+    transform: translateY(5px);
+}
 
 </style>
