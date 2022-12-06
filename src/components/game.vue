@@ -24,6 +24,9 @@ export default {
     },
     methods: {
         play() {
+            if(this.source && this.context.state=='running'){
+                this.source.stop()
+            }
             this.source = this.context.createBufferSource()
             this.source.buffer = audioBuffer
             this.source.connect(this.context.destination)
