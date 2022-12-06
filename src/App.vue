@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="title_header">
+    <div class="app_header">
       <h1>無限ピンポン</h1>
     </div>
     <gameVue></gameVue>
@@ -32,7 +32,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-.title_header h1 {
+.app_header h1 {
   text-align: center;
 }
 </style>
