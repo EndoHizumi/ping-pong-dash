@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="app_header">
-      <h1>無限ピンポン</h1>
+      <h1>ピンポンダッシュ</h1>
     </div>
     <gameVue></gameVue>
   </div>
