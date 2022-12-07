@@ -31,7 +31,11 @@ export default {
 }
 
 .startBtn_image {
-    width: 30%;
+    max-width: 350px;
+}
+
+.startBtn_image img{
+    max-width: 100%;
 }
 
 .startBtn_image:hover {

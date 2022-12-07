@@ -3,17 +3,21 @@
     <div class="app_header">
       <h1>ピンポンダッシュ</h1>
     </div>
-    <gameVue></gameVue>
+    <div class="game-area">
+      <component @start-game="mode='gameVue'" :is="mode"></component>
+    </div>
   </div>
 </template>
 
 <script>
 import gameVue from './components/game.vue';
+import titleVue from './components/title.vue';
 
 export default {
   name: 'App',
   components: {
-    gameVue
+    gameVue,
+    titleVue
   },
   data() {
     return {
@@ -32,7 +36,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-.app_header h1 {
+.app_header {
   text-align: center;
 }
 </style>
