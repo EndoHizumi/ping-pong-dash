@@ -1,72 +1,59 @@
 <template>
     <div id="game">
-        <div>ピンポンした数：{{ count }}</div>
+        <div class="counter">ピンポンした数：{{ count }}</div>
         <div class="door">
             <img :src="doorImagePath">
         </div>
-        <div>
-            <img @click="call" class="doorBell" src="@/assets/door_bell.png" />
+        <div class="doorBell">
+            <img @click="call" src="@/assets/door_bell.png" />
         </div>
     </div>
 </template>
 <script>
-let timeoutId=null
-let audioBuffer = null
-const doorImageList = {
-                close:require('@/assets/door_close.png'),
-                halfOpen:require('@/assets/door_half_open.png'),
-                police:require('@/assets/job_police_man.png')
-            }
+
+import { audioPlayer } from '@/utils/audioPlayer'
+import { doorImageList } from '@/static/doorImageList'
+
 export default {
     name: "gameVue",
     data() {
         return {
-            context: new AudioContext(),
-            source: null,
             count: 0,
             isWatch: false,
-            doorImagePath: doorImageList.close
+            doorImagePath: doorImageList.close,
+            bell: new audioPlayer(),
+            timeoutId: 0
         }
     },
-    async mounted() {
-        const res = await fetch("nc250918.mp3")
-        const arrBuffer = await res.arrayBuffer()
-        audioBuffer = await this.context.decodeAudioData(arrBuffer)
+    mounted() {
+        this.bell.init("nc250918.mp3")
     },
     methods: {
         call() {
-            this.play()
+            this.count++
             this.isWatch = true
-            clearTimeout(timeoutId)
-            timeoutId = setTimeout(() => {
+            clearTimeout(this.timeoutId)
+            this.timeoutId = setTimeout(() => {
                 this.doorImagePath = doorImageList.halfOpen
                 setTimeout(() => {
                     this.doorImagePath = doorImageList.close
                 }, 1000);
             }, 3000);
+            this.bell.play()
         },
-        play() {
-            if (this.source && this.context.state == 'running') {
-                this.source.stop()
-            }
-            this.source = this.context.createBufferSource()
-            this.source.buffer = audioBuffer
-            this.source.connect(this.context.destination)
-            this.source.start()
-            this.count++
-        }
     },
     watch: {
         isWatch() {
             if (this.isWatch) {
+                let _count = this.count
                 setTimeout(() => {
-                    if (this.count >= 50) {
-                        clearTimeout(timeoutId)
+                    if (this.count - _count >= 6) {
+                        clearTimeout(this.timeoutId)
                         this.doorImagePath = doorImageList.police
                         this.count = 0
                     }   
                     this.isWatch = false
-                }, 10000);
+                }, 1000);
             }
         }
     }
