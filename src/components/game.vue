@@ -51,7 +51,7 @@ export default {
                         clearTimeout(this.timeoutId)
                         this.doorImagePath = doorImageList.police
                         this.count = 0
-                    }   
+                    }
                     this.isWatch = false
                 }, 1000);
             }
@@ -60,10 +60,30 @@ export default {
 }
 </script>
 <style>
-.doorBell {
-    max-width: 30%;
+#game {
+    display: grid;
+    grid-template-rows: 25px 400px 250px;
+    grid-template-columns: 100%;
 }
 
+.counter {
+    grid-row: 1;
+    grid-column: 1;
+}
+
+.door{
+    grid-row: 2;
+    grid-column: 1;
+}
+
+.doorBell {
+    grid-row: 3;
+    grid-column: 1;
+}
+.doorBell img{
+    max-width: 100%;
+    max-height: 90%;
+}
 .doorBell:active {
     transform: translateY(5px);
 }
