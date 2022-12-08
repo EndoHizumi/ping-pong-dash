@@ -13,29 +13,32 @@
             </div>
         </template>
         <template v-else>
-            <div class="doorBell">
-                <img @click="call" src="@/assets/door_bell.png" />
-            </div>
-            <div class="hideBox">
-                <img @click="isHide = !isHide" :src="hidebox">
-            </div>
+           <buttonVue class="retryBtn " caption="リトライ"></buttonVue>
+           <tweetVue class="tweetBtn"></tweetVue>
         </template>
     </div>
 </template>
 <script>
 
 import { audioPlayer } from '@/utils/audioPlayer'
+import buttonVue from './button.vue'
+import tweetVue from './tweet.vue'
 import { doorImageList, hideImageList } from '@/static/imageList'
 
 export default {
     name: "gameVue",
+    components: {
+        buttonVue,
+        tweetVue
+    },
     data() {
         return {
             count: 0,
             isWatch: false,
             doorImagePath: doorImageList.close,
             bell: new audioPlayer(),
-            timeoutId: null,
+            openTimeoutId: null,
+            closeTimeoutId: null,
             intervalId: null,
             stress: 0,
             isOpen: false,
@@ -56,10 +59,10 @@ export default {
             let max = 0.5
             let rand = Math.round((Math.random() * (max + min) + min) * 100) / 100
             this.isWatch = true
-            this.timeoutId = setTimeout(() => {
+            this.openTimeoutId = setTimeout(() => {
                 this.isOpen = true
                 this.doorImagePath = doorImageList.halfOpen
-                setTimeout(() => {
+                this.closeTimeoutId = setTimeout(() => {
                     this.isOpen = false
                     this.doorImagePath = doorImageList.close
                 }, 1000 + this.stress);
@@ -74,17 +77,12 @@ export default {
         }
     },
     watch: {
-        isFinish() {
-            setTimeout(() => {
-                this.$emit('game-end', this.count)
-            }, 500)
-        },
         isWatch() {
             if (this.isWatch) {
                 let _count = this.count
                 setTimeout(() => {
                     if (this.count - _count >= 8) {
-                        clearTimeout(this.timeoutId)
+                        clearTimeout(this.openTimeoutId)
                         this.doorImagePath = doorImageList.police
                         this.count = 0
                         this.isFinish = true
@@ -97,7 +95,8 @@ export default {
             if (this.isOpen) {
                 this.intervalId = setInterval(() => {
                     if (!this.isHide) {
-                        clearTimeout(this.timeoutId)
+                        clearTimeout(this.openTimeoutId)
+                        clearTimeout(this.closeTimeoutId)
                         this.doorImagePath = doorImageList.noticed
                         this.isFinish = true
                     }
@@ -113,6 +112,8 @@ export default {
 #game {
     display: grid;
     grid-template-rows: 25px 400px 240px 100px;
+    grid-template-columns: 1fr;
+    align-content: end;
 }
 
 .counter {
@@ -148,5 +149,19 @@ export default {
 .hideBox img {
     max-width: 100%;
     max-height: 100%;
+}
+
+.retryBtn {
+    grid-row: 4;
+    grid-column: 1;
+    max-height: 60%;
+    max-width: 100%;
+}
+.tweetBtn {
+    margin-top: 70px;
+    grid-row: 4;
+    grid-column: 1;
+    max-height: 60%;
+    max-width: 100%;
 }
 </style>
