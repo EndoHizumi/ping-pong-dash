@@ -4,7 +4,7 @@
       <h1>ピンポンダッシュ</h1>
     </div>
     <div class="game-area">
-      <component @game-end="mode='endVue'" @start-game="mode='gameVue'" :is="mode">
+      <component @game-end="mode='endVue'" @game-start="mode='gameVue'" :is="mode">
       </component>
     </div>
   </div>
@@ -28,14 +28,17 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+body {
+  width:1vw;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 .app_header {
