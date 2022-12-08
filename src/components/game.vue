@@ -9,7 +9,15 @@
                 <img @click="call" src="@/assets/door_bell.png" />
             </div>
             <div class="hideBox">
-                <img @click="toggleHide" :src="hidebox">
+                <img @click="isHide = !isHide" :src="hidebox">
+            </div>
+        </template>
+        <template v-else>
+            <div class="doorBell">
+                <img @click="call" src="@/assets/door_bell.png" />
+            </div>
+            <div class="hideBox">
+                <img @click="isHide = !isHide" :src="hidebox">
             </div>
         </template>
     </div>
@@ -17,7 +25,7 @@
 <script>
 
 import { audioPlayer } from '@/utils/audioPlayer'
-import { doorImageList } from '@/static/doorImageList'
+import { doorImageList, hideImageList } from '@/static/imageList'
 
 export default {
     name: "gameVue",
@@ -32,7 +40,6 @@ export default {
             stress: 0,
             isOpen: false,
             isHide: false,
-            hidebox: doorImageList.cardboardOpen,
             isFinish: false
         }
     },
@@ -41,12 +48,13 @@ export default {
     },
     methods: {
         call() {
-            if (this.isHide || this.timeoutId) { return }
+            if (this.isHide) { return }
+            this.count++
+            this.bell.play()
+            if (this.timeoutId) { return }
             let min = -0.5
             let max = 0.5
             let rand = Math.round((Math.random() * (max + min) + min) * 100) / 100
-            this.bell.play()
-            this.count++
             this.isWatch = true
             this.timeoutId = setTimeout(() => {
                 this.isOpen = true
@@ -58,13 +66,19 @@ export default {
                 this.timeoutId = null
             }, 3000 - this.stress + rand);
             this.stress += 0.05
-        },
-        toggleHide() {
-            this.isHide = !this.isHide
-            this.hidebox= this.isHide ? doorImageList.cardboardClose : doorImageList.cardboardOpen
+        }
+    },
+    computed: {
+        hidebox() {
+            return this.isHide ? hideImageList.hide : hideImageList.empty
         }
     },
     watch: {
+        isFinish() {
+            setTimeout(() => {
+                this.$emit('game-end', this.count)
+            }, 500)
+        },
         isWatch() {
             if (this.isWatch) {
                 let _count = this.count
@@ -73,51 +87,47 @@ export default {
                         clearTimeout(this.timeoutId)
                         this.doorImagePath = doorImageList.police
                         this.count = 0
-                        this.isFinish=true
+                        this.isFinish = true
                     }
                     this.isWatch = false
                 }, 1000);
             }
         },
         isOpen() {
-            if(this.isOpen){
-                this.intervalId=setInterval(()=>{
-                    if(!this.isHide) {
+            if (this.isOpen) {
+                this.intervalId = setInterval(() => {
+                    if (!this.isHide) {
                         clearTimeout(this.timeoutId)
-                        this.doorImagePath = doorImageList.halfOpen
-                        this.isFinish=true
-                        setTimeout(()=>{
-                            this.$emit('game-end')
-                        },500)
-                    }    
+                        this.doorImagePath = doorImageList.noticed
+                        this.isFinish = true
+                    }
                 }, 100)
-            }else{
+            } else {
                 clearInterval(this.intervalId)
             }
         }
     }
 }
 </script>
-<style>
+<style scoped>
 #game {
     display: grid;
-    grid-template-rows: 25px 400px 250px;
-    grid-template-columns: 35% 30% 100px;
+    grid-template-rows: 25px 400px 240px 100px;
 }
 
 .counter {
     grid-row: 1;
-    grid-column: 2;
+    justify-items: center;
 }
 
 .door {
     grid-row: 2;
-    grid-column: 2;
+    justify-items: center;
 }
 
 .doorBell {
     grid-row: 3;
-    grid-column: 2;
+    justify-items: center;
 }
 
 .doorBell img {
@@ -130,17 +140,12 @@ export default {
 }
 
 .hideBox {
-    position: relative;
-    grid-row: 3;
-    grid-column: 3;
+    grid-row: 4;
     max-width: 100%;
     max-height: 100%;
 }
 
-.hideBox img{
-    position:absolute ;
-    bottom: 30px;
-    right: 10px;
+.hideBox img {
     max-width: 100%;
     max-height: 100%;
 }
