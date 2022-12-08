@@ -4,7 +4,8 @@
       <h1>ピンポンダッシュ</h1>
     </div>
     <div class="game-area">
-      <component @start-game="mode='gameVue'" :is="mode"></component>
+      <component @game-end="mode='endVue'" @start-game="mode='gameVue'" :is="mode">
+      </component>
     </div>
   </div>
 </template>
@@ -36,6 +37,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
 .app_header {
   text-align: center;
 }
