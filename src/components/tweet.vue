@@ -21,7 +21,7 @@ export default {
         "https://twitter.com/intent/tweet?text=" 
         + this.reason + '%0D%0A'
         + "ピンポンした回数：" + this.count + '%0D%0A'
-        +"&url=https://ping-pong-dash.netlify.app/" + '%0D%0A'
+        +"&url=https://ping-pong-dash.netlify.app" + '%0D%0A'
         + "%23ピンポンダッシュ" + '%0D%0A'
         + "%23クソアプリアドベントカレンダー"
       //シェアようの画面へ移行
