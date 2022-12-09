@@ -5,7 +5,7 @@
       <img :src="doorImagePath" />
     </div>
     <template v-if="!isFinish">
-      <div class="doorBell">
+      <div class="doorBell" :class="`${isHide ? hide : show}`">
         <img @click="call" src="@/assets/door_bell.png" />
       </div>
       <div class="hideBox">
@@ -157,7 +157,11 @@ export default {
   max-height: 90%;
 }
 
-.doorBell img:active {
+.doorBell .hide img {
+  filter: grayscale(1)
+}
+
+.doorBell .show img:active {
   transform: translateY(5px);
 }
 
