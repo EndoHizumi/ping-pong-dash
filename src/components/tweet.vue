@@ -22,8 +22,8 @@ export default {
         + this.reason + '%0D%0A'
         + "ピンポンした回数：" + this.count + '%0D%0A'
         +"&url=https://www.google.com/?hl=ja" + '%0D%0A'
-        + "#ピンポンダッシュ" + '%0D%0A'
-        + "#クソアプリアドベントカレンダー" + '%0D%0A';
+        + "%23ピンポンダッシュ" + '%0D%0A'
+        + "%23クソアプリアドベントカレンダー"
       //シェアようの画面へ移行
       location.href = shareURL;
     }
