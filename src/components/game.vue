@@ -13,6 +13,7 @@
       </div>
     </template>
     <template v-else>
+      <span class="reason">{{reason}}</span>
       <buttonVue class="retryBtn" @click="reset" caption="リトライ"></buttonVue>
       <tweetVue :count="count" :reason="reason" class="tweetBtn"></tweetVue>
     </template>
@@ -56,7 +57,7 @@ export default {
       }
       this.count++;
       this.bell.play();
-      if (this.timeoutId) {
+      if (this.openTimeoutId ) {
         return;
       }
       let min = -0.5;
@@ -70,7 +71,7 @@ export default {
           this.isOpen = false;
           this.doorImagePath = doorImageList.close;
         }, 1000 + this.stress);
-        this.timeoutId = null;
+        this.openTimeoutId = null;
       }, 3000 - this.stress + rand);
       this.stress += 0.05;
     },
@@ -87,7 +88,8 @@ export default {
       this.stress = 0;
       this.isOpen = false;
       this.isHide = false;
-      this.isFinish = false;
+      this.isFinish = false
+      this.reason="見つかってしまった！"
     }
   },
   computed: {
@@ -103,7 +105,7 @@ export default {
           if (this.count - _count >= 8) {
             clearTimeout(this.openTimeoutId);
             this.doorImagePath = doorImageList.police;
-            this.count = 0;
+            this.reason="捕まってしまった！"
             this.isFinish = true;
           }
           this.isWatch = false;
@@ -182,5 +184,12 @@ export default {
   grid-column: 1;
   max-height: 60%;
   max-width: 100%;
+}
+
+.reason {
+  align-content: center;
+  font-weight: bold;
+  font-size: xx-large;
+  color: brown;
 }
 </style>
