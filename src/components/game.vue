@@ -5,10 +5,10 @@
       <img :src="doorImagePath" />
     </div>
     <template v-if="!isFinish">
-      <div class="doorBell" :class="`${isHide ? hide : show}`">
+      <div class="doorBell clickable" :class="`${isHide ? 'hide' : 'show'}`">
         <img @click="call" src="@/assets/door_bell.png" />
       </div>
-      <div class="hideBox">
+      <div class="hideBox clickable">
         <img @click="isHide = !isHide" :src="hidebox" />
       </div>
     </template>
@@ -135,21 +135,19 @@ export default {
   grid-template-rows: 25px 400px 240px 100px;
   grid-template-columns: 1fr;
   align-content: end;
+  justify-items: center;
 }
 
 .counter {
   grid-row: 1;
-  justify-items: center;
 }
 
 .door {
   grid-row: 2;
-  justify-items: center;
 }
 
 .doorBell {
   grid-row: 3;
-  justify-items: center;
 }
 
 .doorBell img {
@@ -157,11 +155,7 @@ export default {
   max-height: 90%;
 }
 
-.doorBell .hide img {
-  filter: grayscale(1)
-}
-
-.doorBell .show img:active {
+.clickable:active {
   transform: translateY(5px);
 }
 
