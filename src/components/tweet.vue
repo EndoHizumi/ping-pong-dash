@@ -19,9 +19,11 @@ export default {
       //シェアする画面を設定
       var shareURL =
         "https://twitter.com/intent/tweet?text=" 
-        + this.reason + '<br>'
-        + "ピンポンした回数：" + this.count
-        +"&url=https://www.google.com/?hl=ja";
+        + this.reason + '%0D%0A'
+        + "ピンポンした回数：" + this.count + '%0D%0A'
+        +"&url=https://www.google.com/?hl=ja" + '%0D%0A'
+        + "#ピンポンダッシュ" + '%0D%0A'
+        + "#クソアプリアドベントカレンダー" + '%0D%0A';
       //シェアようの画面へ移行
       location.href = shareURL;
     }
