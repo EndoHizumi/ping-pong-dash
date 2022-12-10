@@ -1,35 +1,27 @@
 <template>
   <div id="game">
+    <endVue @reset="reset" class="end" v-if="isFinish"></endVue>
     <div class="counter">ピンポンした数：{{ count }}</div>
     <div class="door">
       <img :src="doorImagePath" />
     </div>
-    <template v-if="!isFinish">
-      <div class="doorBell clickable" :class="`${isHide ? 'hide' : 'show'}`">
+      <div class="doorBell" :class="`${isHide ? hide : show}`">
         <img @click="call" src="@/assets/door_bell.png" />
       </div>
       <div class="hideBox clickable">
         <img @click="isHide = !isHide" :src="hidebox" />
       </div>
-    </template>
-    <template v-else>
-      <span class="reason">{{reason}}</span>
-      <buttonVue class="retryBtn" @click="reset" caption="リトライ"></buttonVue>
-      <tweetVue :count="count" :reason="reason" class="tweetBtn"></tweetVue>
-    </template>
   </div>
 </template>
 <script>
 import { audioPlayer } from "@/utils/audioPlayer";
-import buttonVue from "./button.vue";
-import tweetVue from "./tweet.vue";
 import { doorImageList, hideImageList } from "@/static/imageList";
+import endVue from "./end.vue";
 
 export default {
   name: "gameVue",
   components: {
-    buttonVue,
-    tweetVue
+    endVue
   },
   data() {
     return {
@@ -137,6 +129,15 @@ export default {
   align-content: end;
   justify-items: center;
 }
+.end {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(100, 100, 100, 0.8);
+  z-index: 2147483647;
+}
 
 .counter {
   grid-row: 1;
@@ -184,10 +185,4 @@ export default {
   max-width: 100%;
 }
 
-.reason {
-  align-content: center;
-  font-weight: bold;
-  font-size: xx-large;
-  color: brown;
-}
 </style>
