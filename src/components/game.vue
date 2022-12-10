@@ -4,33 +4,20 @@
     <div class="door">
       <img :src="doorImagePath" />
     </div>
-    <template v-if="!isFinish">
-      <div class="doorBell clickable" :class="`${isHide ? 'hide' : 'show'}`">
+      <div class="doorBell" :class="`${isHide ? 'hide' : 'show'}`">
         <img @click="call" src="@/assets/door_bell.png" />
       </div>
       <div class="hideBox clickable">
         <img @click="isHide = !isHide" :src="hidebox" />
       </div>
-    </template>
-    <template v-else>
-      <span class="reason">{{reason}}</span>
-      <buttonVue class="retryBtn" @click="reset" caption="リトライ"></buttonVue>
-      <tweetVue :count="count" :reason="reason" class="tweetBtn"></tweetVue>
-    </template>
   </div>
 </template>
 <script>
 import { audioPlayer } from "@/utils/audioPlayer";
-import buttonVue from "./button.vue";
-import tweetVue from "./tweet.vue";
 import { doorImageList, hideImageList } from "@/static/imageList";
 
 export default {
   name: "gameVue",
-  components: {
-    buttonVue,
-    tweetVue
-  },
   data() {
     return {
       count: 0,
@@ -42,9 +29,7 @@ export default {
       intervalId: null,
       stress: 0,
       isOpen: false,
-      isHide: false,
-      isFinish: false,
-      reason: "見つかってしまった！"
+      isHide: false
     };
   },
   mounted() {
@@ -88,8 +73,6 @@ export default {
       this.stress = 0;
       this.isOpen = false;
       this.isHide = false;
-      this.isFinish = false
-      this.reason="見つかってしまった！"
     }
   },
   computed: {
@@ -105,8 +88,7 @@ export default {
           if (this.count - _count >= 8) {
             clearTimeout(this.openTimeoutId);
             this.doorImagePath = doorImageList.police;
-            this.reason="捕まってしまった！"
-            this.isFinish = true;
+            this.$emit('game-end', {count: this.count, reason:"捕まってしまった！"})
           }
           this.isWatch = false;
         }, 1000);
@@ -119,7 +101,7 @@ export default {
             clearTimeout(this.openTimeoutId);
             clearTimeout(this.closeTimeoutId);
             this.doorImagePath = doorImageList.noticed;
-            this.isFinish = true;
+            this.$emit('game-end', {count: this.count, reason:"見つかってしまった！"})
           }
         }, 100);
       } else {
@@ -132,10 +114,8 @@ export default {
 <style scoped>
 #game {
   display: grid;
-  grid-template-rows: 25px 400px 240px 100px;
+  grid-template-rows: 25px 400px 200px 80px;
   grid-template-columns: 1fr;
-  align-content: end;
-  justify-items: center;
 }
 
 .counter {
@@ -170,24 +150,4 @@ export default {
   max-height: 100%;
 }
 
-.retryBtn {
-  grid-row: 4;
-  grid-column: 1;
-  max-height: 60%;
-  max-width: 100%;
-}
-.tweetBtn {
-  margin-top: 70px;
-  grid-row: 4;
-  grid-column: 1;
-  max-height: 60%;
-  max-width: 100%;
-}
-
-.reason {
-  align-content: center;
-  font-weight: bold;
-  font-size: xx-large;
-  color: brown;
-}
 </style>
